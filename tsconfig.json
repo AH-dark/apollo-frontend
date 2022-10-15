@@ -35,7 +35,10 @@
       ],
       "@store/*": [
         "store/*"
-      ]
+      ],
+      "@reducers/*": [
+        "store/reducers/*"
+      ],
     }
   },
   "include": [
