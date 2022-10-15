@@ -1,7 +1,7 @@
 import { NextPage } from "next"
 import Layouts from "@/layouts"
 import { useRouter } from "next/router"
-import { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { useGetCommentQuery } from "@/services/api"
 import dayjs from "dayjs"
 import MD5 from "@/util/md5"
@@ -32,7 +32,7 @@ const Comment: NextPage = () => {
 
     return (
         <Layouts>
-            <div className="block p-6 w-full flex flex-col mt-16 sm:mt-24 bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <div className="block p-6 w-full flex flex-col mt-16 sm:mt-24 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                 {isLoading ? (
                     <div className="flex justify-center">
                         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
@@ -83,32 +83,45 @@ const Comment: NextPage = () => {
             <div className="block p-6 w-full flex flex-col mt-8 bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 {isLoading ? (
                     <div className="flex justify-center">
-                        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+                        <div className="flex-1 space-y-6 py-1">
+                            <div className="h-2 bg-slate-200 rounded"></div>
+                            <div className="h-2 bg-slate-200 rounded"></div>
+                            <div className="h-2 bg-slate-200 rounded"></div>
+                        </div>
                     </div>
                 ) : (
                     <>
-                        {data?.reply && (
+                        {data?.reply ? (
+                            <>
+                                <div
+                                    className="flex flex-col justify-center w-full h-full flex-grow"
+                                    style={{ minHeight: 80 }}
+                                >
+                                    <p className="mb-2 text-lg tracking-tight text-gray-900 dark:text-white text-center">
+                                        {data?.reply}
+                                    </p>
+                                </div>
+                                <div className="flex items-center justify-center">
+                                    <div className="flex space-x-1 text-sm text-gray-500 dark:text-gray-400">
+                                        Replied at{" "}
+                                        <time
+                                            dateTime="2020-03-16 01:00:00"
+                                            className={"ml-1"}
+                                        >
+                                            {dayjs(data?.replied_at).format(
+                                                "YYYY-MM-DD HH:mm:ss"
+                                            )}
+                                        </time>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
                             <div
-                                className="flex flex-col justify-center w-full h-full flex-grow"
+                                className="flex items-center justify-center"
                                 style={{ minHeight: 80 }}
                             >
-                                <p className="mb-2 text-lg tracking-tight text-gray-900 dark:text-white text-center">
-                                    {data?.reply}
-                                </p>
-                            </div>
-                        )}
-                        {data?.replied_at && (
-                            <div className="flex items-center justify-center">
                                 <div className="flex space-x-1 text-sm text-gray-500 dark:text-gray-400">
-                                    Replied at{" "}
-                                    <time
-                                        dateTime="2020-03-16 01:00:00"
-                                        className={"ml-1"}
-                                    >
-                                        {dayjs(data?.replied_at).format(
-                                            "YYYY-MM-DD HH:mm:ss"
-                                        )}
-                                    </time>
+                                    No reply yet
                                 </div>
                             </div>
                         )}
