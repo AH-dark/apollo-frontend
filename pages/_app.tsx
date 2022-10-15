@@ -8,6 +8,7 @@ import { useSelector } from "@/store"
 import { useGetBasicSiteInfoQuery } from "@/services/api"
 import { useRouter } from "next/router"
 import { Provider } from "react-redux"
+import LoadBar from "@components/LoadBar"
 
 const SeoHead: React.FC = () => {
     const titleSet = useSelector((state) => state.view.title)
@@ -74,6 +75,7 @@ const App: NextPage<AppProps> = ({ Component, ...rest }) => {
     return (
         <Provider store={store}>
             <SeoHead />
+            <LoadBar />
             <Component {...props.pageProps} />
         </Provider>
     )

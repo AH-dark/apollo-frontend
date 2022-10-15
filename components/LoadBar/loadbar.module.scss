@@ -1,0 +1,81 @@
+.loadBar {
+  @apply fixed top-0 left-0 w-full ;
+
+  .line {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    height: 4px;
+    z-index: 0;
+    background-color: rgb(167, 202, 237);
+
+    .subline {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      top: 0;
+
+      transition: transform 0.2s linear 0s;
+      transform-origin: left center;
+      background-color: rgb(25, 118, 210);
+      width: auto;
+    }
+
+    .subline[data-num="1"] {
+      animation: 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) 0s infinite normal none running indeterminate1Keyframe;
+    }
+
+    .subline[data-num="2"] {
+      animation: 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.15s infinite normal none running indeterminate2Keyframe;
+    }
+
+    @keyframes indeterminate1Keyframe {
+      0% {
+        left: -35%;
+        right: 100%;
+      }
+      60% {
+        left: 100%;
+        right: -90%;
+      }
+      100% {
+        left: 100%;
+        right: -90%;
+      }
+    }
+
+    @keyframes indeterminate2Keyframe {
+      0% {
+        left: -200%;
+        right: 100%;
+      }
+      60% {
+        left: 107%;
+        right: -8%;
+      }
+      100% {
+        left: 107%;
+        right: -8%;
+      }
+    }
+
+    @keyframes bufferKeyframe {
+      0% {
+        opacity: 1;
+        background-position: 0 -23px;
+      }
+      60% {
+        opacity: 0;
+        background-position: 0 -23px;
+      }
+      100% {
+        opacity: 1;
+        background-position: -200px -23px;
+      }
+    }
+  }
+}
+
+.loadBar[data-hidden="true"] {
+  display: none;
+}
