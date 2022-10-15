@@ -1,11 +1,13 @@
 import { NextPage } from "next"
 import Layouts from "@/layouts"
 import { useRouter } from "next/router"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { useGetCommentQuery } from "@/services/api"
 import dayjs from "dayjs"
 import MD5 from "@/util/md5"
 import CommentsList from "@components/CommentsList"
+import { useDispatch } from "@/store"
+import { setTitle } from "@reducers/view"
 
 const Comment: NextPage = () => {
     const { slug } = useRouter().query
@@ -20,6 +22,11 @@ const Comment: NextPage = () => {
 
         return ""
     }, [slug])
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(setTitle("Comment " + commentId))
+    }, [dispatch])
 
     const { data, isLoading } = useGetCommentQuery(commentId)
 
