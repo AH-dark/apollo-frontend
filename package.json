@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.12",
     "axios": "^1.1.2",
     "clsx": "^1.2.1",
+    "crypto-js": "^4.1.1",
     "cssnano": "^5.1.13",
     "dayjs": "^1.11.5",
     "flowbite": "^1.5.3",
@@ -29,6 +30,7 @@
     "tailwindcss": "^3.1.8"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
     "@types/node": "18.11.0",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",

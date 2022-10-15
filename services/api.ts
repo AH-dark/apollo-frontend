@@ -132,6 +132,15 @@ const api = createApi({
                 },
             ],
         }),
+        getComment: builder.query<CommentResponse, string>({
+            query: (id) => ({ url: `/comment/${id}` }),
+            providesTags: (result) => [
+                {
+                    type: "Comment",
+                    id: result?.id,
+                },
+            ],
+        }),
     }),
 })
 
@@ -142,5 +151,6 @@ export const {
     useLogoutMutation,
     usePostCommentMutation,
     useListCommentsQuery,
+    useGetCommentQuery,
 } = api
 export default api

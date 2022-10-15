@@ -4,6 +4,7 @@
 
 body {
     background-color: #f5f5f5;
+    @apply bg-no-repeat bg-cover bg-center bg-clip-border bg-fixed bg-origin-border;
 }
 
 @media (prefers-color-scheme: dark) {

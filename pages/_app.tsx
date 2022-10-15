@@ -33,7 +33,7 @@ const SeoHead: React.FC = () => {
 
     useEffect(() => {
         if (typeof siteConfig !== "undefined") {
-            window.document.body.style.background = `url(${siteConfig?.settings.comment_background_image})`
+            window.document.body.style.backgroundImage = `url(${siteConfig?.settings.comment_background_image})`
         }
     }, [siteConfig])
 
