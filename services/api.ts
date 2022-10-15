@@ -5,6 +5,11 @@ import { AxiosError } from "axios"
 import type AppResponse from "@/protos/response/app_response"
 import type ErrorResponse from "@/protos/response/error_response"
 import type SiteInfoResponse from "@/protos/response/siteinfo_response"
+import CheckLoginResponse from "@/protos/response/check_login_response"
+import UserResponse from "@/protos/response/user_response"
+import LoginPayload from "@/protos/request/login_payload"
+import SubmitCommentPayload from "@/protos/request/submit_comment_payload"
+import CommentResponse from "@/protos/response/comment_response"
 
 const axiosBaseQuery: () => BaseQueryFn =
     () =>
@@ -42,6 +47,7 @@ const axiosBaseQuery: () => BaseQueryFn =
 const api = createApi({
     reducerPath: "api",
     baseQuery: axiosBaseQuery(),
+    tagTypes: ["CurrentUser", "SiteInfo", "User", "Comment"],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {
             return action.payload[reducerPath]
@@ -50,9 +56,64 @@ const api = createApi({
     endpoints: (builder) => ({
         getBasicSiteInfo: builder.query<SiteInfoResponse, void>({
             query: () => ({ url: "/info/site" }),
+            providesTags: (result) => [
+                ...(result
+                    ? Array.from(Object.keys(result.settings)).map<{
+                          type: "SiteInfo"
+                          id: string
+                      }>((k) => ({
+                          type: "SiteInfo",
+                          id: k,
+                      }))
+                    : []),
+                {
+                    type: "SiteInfo",
+                    id: "LIST",
+                },
+                {
+                    type: "SiteInfo",
+                    id: "BASIC_LIST",
+                },
+            ],
+        }),
+        getCurrentUser: builder.query<CheckLoginResponse, void>({
+            query: () => ({ url: "/session/me" }),
+            providesTags: (result) => [
+                {
+                    type: "User",
+                    id: result?.id,
+                },
+                "CurrentUser",
+            ],
+        }),
+        login: builder.mutation<UserResponse, LoginPayload>({
+            query: (payload) => ({
+                url: "/auth/login",
+                method: "POST",
+                data: payload,
+            }),
+            invalidatesTags: ["CurrentUser"],
+        }),
+        logout: builder.mutation<void, void>({
+            query: () => ({ url: "/auth/logout", method: "POST" }),
+            invalidatesTags: ["CurrentUser"],
+        }),
+        postComment: builder.mutation<CommentResponse, SubmitCommentPayload>({
+            query: (payload) => ({
+                url: "/comment",
+                method: "POST",
+                data: payload,
+            }),
+            invalidatesTags: ["Comment", { type: "Comment", id: "LIST" }],
         }),
     }),
 })
 
-export const { useGetBasicSiteInfoQuery } = api
+export const {
+    useGetBasicSiteInfoQuery,
+    useGetCurrentUserQuery,
+    useLoginMutation,
+    useLogoutMutation,
+    usePostCommentMutation,
+} = api
 export default api
