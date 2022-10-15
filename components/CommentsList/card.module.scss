@@ -1,0 +1,28 @@
+.card {
+  @apply block p-4 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700;
+
+  .part {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .col {
+      flex: 1 1 0;
+
+      .content {
+        @apply text-sm text-gray-800 dark:text-white text-center p-4;
+
+        min-height: 120px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .footer {
+        @apply text-xs text-gray-500 dark:text-gray-400;
+      }
+    }
+  }
+}

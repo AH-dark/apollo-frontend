@@ -10,6 +10,7 @@ import UserResponse from "@/protos/response/user_response"
 import LoginPayload from "@/protos/request/login_payload"
 import SubmitCommentPayload from "@/protos/request/submit_comment_payload"
 import CommentResponse from "@/protos/response/comment_response"
+import CommentsListResponse from "@/protos/response/comments_list_response"
 
 const axiosBaseQuery: () => BaseQueryFn =
     () =>
@@ -100,11 +101,36 @@ const api = createApi({
         }),
         postComment: builder.mutation<CommentResponse, SubmitCommentPayload>({
             query: (payload) => ({
-                url: "/comment",
+                url: "/comment/submit",
                 method: "POST",
                 data: payload,
             }),
             invalidatesTags: ["Comment", { type: "Comment", id: "LIST" }],
+        }),
+        listComments: builder.query<
+            CommentsListResponse,
+            { before: number; pageSize: number }
+        >({
+            query: ({ before, pageSize }) => ({
+                url: "/comment/list",
+                params: {
+                    before,
+                    page_size: pageSize,
+                },
+            }),
+            providesTags: (result) => [
+                ...(result?.comments || []).map<{
+                    type: "Comment"
+                    id: string
+                }>((c) => ({
+                    type: "Comment",
+                    id: c.id,
+                })),
+                {
+                    type: "Comment",
+                    id: "LIST",
+                },
+            ],
         }),
     }),
 })
@@ -115,5 +141,6 @@ export const {
     useLoginMutation,
     useLogoutMutation,
     usePostCommentMutation,
+    useListCommentsQuery,
 } = api
 export default api
